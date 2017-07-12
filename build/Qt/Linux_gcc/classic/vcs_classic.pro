@@ -15,7 +15,9 @@ QMAKE_CXXFLAGS += -Wno-reorder -Wno-unused-parameter -Wno-unused-but-set-paramet
 DEFINES += VIC_CROPSYST_VERSION=4 \
            USE_IRRIGATION_PARAM_FILE \
            VCS_V5 \
-           CROPSYST_VERSION=5
+           CROPSYST_VERSION=5 \
+           CS_VERSION=5 \
+           LIU_DEBUG
 
 INCLUDEPATH += ../../../../../VIC/vic/drivers/classic/include \
                ../../../../../VIC/vic/drivers/shared_all/include \
@@ -166,7 +168,14 @@ SOURCES += \
     ../../../../vcs/drivers/classic/src/get_global_crop_param.c \
     ../../../../vcs/drivers/classic/src/display_current_settings_crop.c \
     ../../../../vcs/drivers/shared_all/src/init_irrigation_types.c \
-    ../../../../../VIC_CropSyst_common/VCS_Nl.c
+    ../../../../vcs/drivers/shared_all/src/VCS_Nl_v5.c \
+    ../../../../../VIC_CropSyst/agronomic/VIC_land_unit_C_interface.cpp \
+    ../../../../../VIC_CropSyst/agronomic/irrigation_lib.c \
+    ../../../../../VIC_CropSyst/agronomic/VIC_land_unit_simulation.cpp \
+    ../../../../../VIC_CropSyst/agronomic/VIC_soil.cpp \
+    ../../../../../common/biometeorology/ET_model.cpp \
+    ../../../../vcs/drivers/shared_all/src/generate_daily_forcing.c \
+    ../../../../vcs/drivers/shared_all/src/read_cropcodelib.c
 
 HEADERS += \
     ../../../../../VIC/vic/drivers/classic/include/vic_driver_classic.h \
@@ -179,4 +188,39 @@ HEADERS += \
     ../../../../vcs/vcs_run/include/VCS_Nl_def.h \
     ../../../../vcs/vcs_run/include/VCS_user_def.h \
     ../../../../vcs/drivers/shared_all/include/vcs_driver_shared_all.h \
-    ../../../../../VIC_CropSyst_common/VCS_Nl.h
+    ../../../../vcs/drivers/shared_all/include/VCS_Nl_v5.h
+
+unix:!macx: LIBS += -L$$PWD/../../../../../CS_suite/build/Qt/CS_suite_static/Debug/ -lCS_suite_static
+
+INCLUDEPATH += $$PWD/../../../../../CS_suite/build/Qt/CS_suite_static/Debug
+DEPENDPATH += $$PWD/../../../../../CS_suite/build/Qt/CS_suite_static/Debug
+
+unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../CS_suite/build/Qt/CS_suite_static/Debug/libCS_suite_static.a
+
+unix:!macx: LIBS += -L$$PWD/../../../../../UED/library/build/Qt/UED_static/Release/ -lUED_static
+
+INCLUDEPATH += $$PWD/../../../../../UED/library/build/Qt/UED_static/Release
+DEPENDPATH += $$PWD/../../../../../UED/library/build/Qt/UED_static/Release
+
+unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../UED/library/build/Qt/UED_static/Release/libUED_static.a
+
+unix:!macx: LIBS += -L$$PWD/../../../../../common/weather/build/Qt/Linux_gcc/Release_VIC/ -lweather_static
+
+INCLUDEPATH += $$PWD/../../../../../common/weather/build/Qt/Linux_gcc/Release_VIC
+DEPENDPATH += $$PWD/../../../../../common/weather/build/Qt/Linux_gcc/Release_VIC
+
+unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../common/weather/build/Qt/Linux_gcc/Release_VIC/libweather_static.a
+
+unix:!macx: LIBS += -L$$PWD/../../../../../CropSyst/source/build/Qt/Linux_gcc/Debug_VIC_V3/ -lCropSyst_element_V5_for_VIC_V3
+
+INCLUDEPATH += $$PWD/../../../../../CropSyst/source/build/Qt/Linux_gcc/Debug_VIC_V3
+DEPENDPATH += $$PWD/../../../../../CropSyst/source/build/Qt/Linux_gcc/Debug_VIC_V3
+
+unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../CropSyst/source/build/Qt/Linux_gcc/Debug_VIC_V3/libCropSyst_element_V5_for_VIC_V3.a
+
+unix:!macx: LIBS += -L$$PWD/../../../../../corn/build/Qt/Linux_gcc/Debug/ -lcorn_complete_static
+
+INCLUDEPATH += $$PWD/../../../../../corn/build/Qt/Linux_gcc/Debug
+DEPENDPATH += $$PWD/../../../../../corn/build/Qt/Linux_gcc/Debug
+
+unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../corn/build/Qt/Linux_gcc/Debug/libcorn_complete_static.a

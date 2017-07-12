@@ -9,9 +9,17 @@
 #ifndef MAX_LAYERS
 #define MAX_LAYERS 17
 #endif
-#ifndef N_PET_TYPES
+//#ifndef N_PET_TYPES
 #define N_PET_TYPES 6
-#endif
+#define N_PET_TYPES_NON_NAT 4
+#define PET_SATSOIL 0
+#define PET_H2OSURF 1
+#define PET_SHORT   2
+#define PET_TALL    3
+#define N_PET_TYPES_NAT 2
+#define PET_NATVEG  4
+#define PET_VEGNOCR 5
+//#endif
 
 #ifdef VCS_V5
 #define atmos_data_struct force_data_struct
@@ -183,6 +191,7 @@ typedef struct veg_lib_struct veg_lib_struct;
 typedef struct {
   int     veg_class_code;                                                        //* stores codes related to each veg class -130226 Keyvan-added *
                                                                                  //* It's also the code including crop rotation cycle infomation *
+  double  Cv_sum;                                                                //* total fraction of vegetation coverage *
   #if VIC_CROPSYST_VERSION>=3
   veg_lib_struct **veg_lib;                                                      //* 151001LML for each band. It's pointer array.*
   #endif
@@ -191,9 +200,16 @@ typedef struct {
 typedef struct {
   double tmax;                                                                   //* max air temperature (C) * //keyvan NOV 2012 130219 RLN
   double tmin;                                                                   //* min air temperature (C) * //keyvan NOV 2012 130219 RLN
+  double tavg;
   double *relative_humidity;                                                     //*relative humidity. Percentage*
   double relative_humidity_min;                                                  //*daily minimum relative humidity. Percentage*
   double relative_humidity_max;                                                  //*daily maximum relative humidity. Percentage*
+  double relative_humidity_avg;                                                  //*daily maximum relative humidity. Percentage*
+  double wind_avg;                                                               //(m/s)
+  double pressure_avg;                                                           //(kPa)
+  double prec_sum;                                                               //(mm)
+  double sortwave_radiation_sum;                                                 //(MJ/m2)
+  double vpd_avg;                                                                //(kPa)
 } VCS_atmos_data_struct;
 
 typedef struct {
@@ -319,6 +335,12 @@ typedef struct crop_data_struct {
   #endif
 } crop_data_struct;
 
+typedef struct {
+#if (VIC_CROPSYST_VERSION>=3)
+  crop_data_struct *crop_state;
+#endif
+} VCS_veg_var_struct;
+
 //******************************************************************
 //  This structure stores parameters for individual crop types.
 //  ******************************************************************
@@ -357,7 +379,7 @@ typedef struct {
 typedef struct {
     char cropname[MAXSTRING];
     int code;
-}CropCodeLib;
+} CropCodeLib;
 #endif
 
 /*******************************************************

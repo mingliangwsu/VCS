@@ -62,7 +62,33 @@ bool IsRotationWithMultipleCycles(int veg_class_code_in_veg_con_file);          
 void DecomposeVegclassCode(int veg_class_code_runtime,
                            int &rotation_or_crop_veg_class_code,
                            int &rotation_cycle_index);                           //LML 150526
-double evaporation_from_irrigation_systems(double ET0, double ET0_open_water, int irrigation_index, double crop_h = 0.5);
+bool is_surface_irrigation(const General_Irrigation_Type girrig_type);
+bool is_sprinkler_irrigation(const General_Irrigation_Type girrig_type);
+double calc_infiltration_capacity(const double s_philip
+  ,const double irrig_time, const double ks);
+double calc_runoff_from_center_pivot(const double irrigation_amount_mm,
+  const double sprinkler_diameter, const double ks,
+  const double s_philip, const double time_of_rotattion);
+double calc_Maximum_sorptivity(double sand, double clay, double porosity,
+                               double b_campbell);
+double evaporation_from_irrigation_systems(    int irrigation_index,
+#ifdef ED_PLAYAN
+                                               double wind,
+                                               double air_temp,
+                                               double rhum,
+                                               double irrigation_amount
+#else
+                                               double ET0,
+                                               double crop_h = 0.5
+#endif
+        );
+double calc_irrigation_runoff_surface(double, double, double, double, double, double);
+double calc_irrigation_runoff(
+    const int irrigation_index,
+    const double irrigation_amount_mm,
+    const double soil_toplayer_moist_mm,
+    const double max_allowable_deficit,
+    const soil_con_struct *soil_con);
 void clear_cell_irrigation_water_fluxes(cell_data_struct *current_cell);         //150702LML
 CO2_conc_struct *read_CO2_conc(FILE *);
 double solve_penman_for_T (double, va_list);
@@ -115,5 +141,7 @@ int set_average_veglib_for_crop(veg_lib_struct &veglib,
                                 const soil_con_struct *soil_con,
                                 const int veg_index,
                                 const int current_month);                        //150929LML
+General_Irrigation_Type identify_general_irrigation_type(const Irrigation_Type irrigation);
+void set_irrigation_efficiency_of_irrigation_library(const int management_factor);
 #endif  //(VIC_CROPSYST_VERSION>=3)
 #endif // VCS_NL_H

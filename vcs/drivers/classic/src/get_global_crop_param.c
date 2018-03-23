@@ -88,7 +88,7 @@ get_global_crop_param(FILE *gp)
                 sscanf(cmdstr,"%*s %s",&filenames.VCS.CropSyst_Working_dir);
             }
             else if( strcasecmp("CO2_PPM",optstr) == 0){
-                sscanf(cmdstr,"%*s %d",&options.VCS.CO2_PPM);
+                sscanf(cmdstr,"%*s %lf",&options.VCS.CO2_PPM);
             }
             else if(strcasecmp("CO2_TRANSIENT",optstr) == 0) {
                 sscanf(cmdstr,"%*s %s",flgstr);

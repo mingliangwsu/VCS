@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "irrigation_lib.h"
 #ifndef MAXSTRING
-#define MAXSTRING 1024
+#define MAXSTRING 2048
 #endif
 #ifndef MAX_LAYERS
 #define MAX_LAYERS 17
@@ -174,6 +174,7 @@ typedef struct {
   double   AE[MAX_LAYERS];                                                       //* Air entry potential*
   double   silt[MAX_LAYERS];                                                     //* silt content*
 #if (VIC_CROPSYST_VERSION>=3)
+  double   S_max;                                                                //Maximum_sorptivity
   double   water_pot_at_FC[MAX_LAYERS];                                          //(J/kg or kPa) 170504LML
   int CropSyst_Soil_ID;                                                          //* for CropSyst soil properties LML 141104*
   Irrigation_Types_In_Each_Cell irrigation_type_list;                            //160609LML
@@ -229,10 +230,16 @@ typedef struct {
   double intercepted_irrigation;                                                 //Irrigation for feeding the Wdmax before and after irrigation, and canopy evaporation demand
   double potential_transpir;                                                     //crop potential transpiration 150702LML
   double infiltration;                                                           //*the amount of water that gets into the top layer.  Used to inform the crop
-                                                                               //crop model waht is getting into the water.  Added by Kiran Chinnayakanahalli 11222010*
+                                                                                 //crop model waht is getting into the water.  Added by Kiran Chinnayakanahalli 11222010*
   double irrigation_water;                                                       //*the amount of water added as irrigation water.  KJC 03312011 *
   double aero_resist_daily[N_PET_TYPES][3];                                      //150608LML for CropSyst
+#ifndef VCS_V5
   double pot_evap_daily[N_PET_TYPES];                                            //*150608LML array of different types of potential evaporation (mm/day) *
+#else
+  double pot_evap_total_daily;                                                   //(mm)
+  double pot_evap_veg_daily;                                                     //(mm)
+  double pot_evap_soil_daily;                                                    //(mm)
+#endif
   int iscrop;                                                                    //*to identify if this is a crop paramter. 1-crop paramter, 0-not a crop parameter. Default is 0.*
   double infiltration_daily_m;                                                   //151001LML used for CropSyst chemical transport
 } VCS_cell_data_struct;

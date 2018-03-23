@@ -12,12 +12,20 @@ QMAKE_CC = g++
 QMAKE_CXXFLAGS += -fpermissive  -w -g -O0
 QMAKE_CXXFLAGS += -Wno-reorder -Wno-unused-parameter -Wno-unused-but-set-parameter
 
-DEFINES += VIC_CROPSYST_VERSION=4 \
+DEFINES += CS_VERSION_NUMBERS="5,0,0" \
+           Normal_crop_growth_stage=Normal_crop_event_sequence \
+           VIC_CROPSYST_VERSION=4 \
            USE_IRRIGATION_PARAM_FILE \
            VCS_V5 \
            CROPSYST_VERSION=5 \
+           USE_WEATHER_PROVIDER \
+           WEATHER_PROVIDER_VERSION=5 \
+           EVENT_SCHEDULER_VERSION=1 \
            CS_VERSION=5 \
-           LIU_DEBUG
+           OLD_ORCHARD \
+           LIU_DEBUG \
+           IRRIGATION_MANAGEMENT_QUALITY=1 \
+           ED_PLAYAN
 
 INCLUDEPATH += ../../../../../VIC/vic/drivers/classic/include \
                ../../../../../VIC/vic/drivers/shared_all/include \
@@ -27,6 +35,7 @@ INCLUDEPATH += ../../../../../VIC/vic/drivers/classic/include \
                ../../../../vcs/drivers/classic/include \
                ../../../../../VIC_CropSyst_common \
                ../../../../../VIC_CropSyst \
+               ../../../../../VIC_CropSyst/agronomic \
                ../../../../../CropSyst/source \
                ../../../../../common \
                ../../../../../corn \
@@ -175,7 +184,9 @@ SOURCES += \
     ../../../../../VIC_CropSyst/agronomic/VIC_soil.cpp \
     ../../../../../common/biometeorology/ET_model.cpp \
     ../../../../vcs/drivers/shared_all/src/generate_daily_forcing.c \
-    ../../../../vcs/drivers/shared_all/src/read_cropcodelib.c
+    ../../../../vcs/drivers/shared_all/src/read_cropcodelib.c \
+    ../../../../vcs/drivers/shared_all/src/init_vcs_cell.c \
+    ../../../../../VIC_CropSyst/crop/VIC_soil_hydrology.c
 
 HEADERS += \
     ../../../../../VIC/vic/drivers/classic/include/vic_driver_classic.h \

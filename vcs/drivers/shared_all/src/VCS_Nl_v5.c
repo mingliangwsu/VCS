@@ -191,9 +191,8 @@ double evaporation_from_irrigation_systems(
     double Ed = 0;
     VIC_Irrigation_library *current_irrigation = &Irrigation_library[irrigation_index];
     int irrigation_code = current_irrigation->IrrigationType_code;
-    //  double irrigation_runoff = Irrigation_library[irrigation_index].irrigation_efficiency[0];
     #if (VIC_CROPSYST_VERSION>=3)
-    Irrigation_Efficiency &irr_eff = current_irrigation->irrigation_efficiency;
+    Irrigation_Facility_Charactor &irr_eff = current_irrigation->irrigation_facility_charactor;
     double cd               = irr_eff.cd;                                        //1.1; //nuzzle coeficient
     double h                = irr_eff.h_op * 100.;                               //207.0; //irrigation system operating pressure kpa
     double g                = CONST_G;
@@ -615,4 +614,5 @@ void DecomposeVegclassCode(int veg_class_code_runtime,
         rotation_cycle_index            = 0;
     }
 }
+//______________________________________________________________________________
 #endif  //VIC_CROPSYST_VERSION
